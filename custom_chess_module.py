@@ -217,7 +217,6 @@ class Game():
             self.turn = "black"
         else:
             self.turn = "white"
-
     
     def detect_castle(self, uci_string):
         
