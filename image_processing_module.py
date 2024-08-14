@@ -157,7 +157,7 @@ class ImageProcessing:
         
         # reads the initial image
         image_initial = cv2.imread(self.file_names[self.picture_number])
-        # Increments the 
+    
         self.picture_number += 1
 
         # reads the next image
