@@ -22,18 +22,10 @@ class ImageProcessing:
         self.grid_tile_map = {}
         self.populate_gt_map()
 
-    # This value is hard coded. To run this program, play with these values in the commented code until you can an 8 x 8 taking up the entire window. 
 
-    def crop_image(self, image):
-        
-        # Play with these values:
+    def crop_image(self, image, values):
 
-        # image = image[1450:2700, 1630:2870]
-        # cv2.imshow("crop", image)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-
-        return image[1450:2700, 1630:2870]
+        return image[values[2]:values[3], values[0]:values[1]]
     
     # The cropped image will be preprocessed here to make the computation easier for the computer. 
     def pre_process_image(self, cropped_image):
@@ -102,7 +94,6 @@ class ImageProcessing:
         
         # I take these two positions as there is a possibility the rooks brightness is brighter than the kings, or in en passant cases.
         third_max_position = sorted_brightness_list[2][1]
-        # TODO: en passant here 
 
         if (not has_castled):
             return (first_max_position, second_max_position)
@@ -123,7 +114,6 @@ class ImageProcessing:
             # Map the algebraic tile to the index. 
             mp_idx_dict[algebraic_tile] = i
 
-        
 
     def image_detects_castle(self, max_position_list, turn):
         
@@ -154,7 +144,7 @@ class ImageProcessing:
         #print(mp_idx_dict)
 
     # detect_first_move is an independent method since I haven't added to my deque yet. 
-    def detect_first_move(self, board_array):
+    def detect_first_move(self, board_array, values):
         
         # reads the initial image
         image_initial = cv2.imread(self.file_names[self.picture_number])
@@ -165,8 +155,8 @@ class ImageProcessing:
         image_next = cv2.imread(self.file_names[self.picture_number])
         self.picture_number += 1    
 
-        cropped_initial = self.crop_image(image_initial)
-        cropped_next = self.crop_image(image_next)
+        cropped_initial = self.crop_image(image_initial, values)
+        cropped_next = self.crop_image(image_next, values)
 
         blurred_initial = self.pre_process_image(cropped_initial)
         blurred_next = self.pre_process_image(cropped_next)
@@ -178,14 +168,14 @@ class ImageProcessing:
         first_max_position, second_max_position = self.find_max_brightness_values(abs_diff, has_castled=False, turn="white", board_array = board_array)
         return first_max_position, second_max_position
 
-    def detect_move(self, has_castled, turn, board_array):
+    def detect_move(self, has_castled, turn, board_array, values):
 
         prev_image = self.images_deque.popleft()
 
         curr_image = cv2.imread(self.file_names[self.picture_number])
         self.picture_number += 1
 
-        cropped_curr = self.crop_image(curr_image)
+        cropped_curr = self.crop_image(curr_image, values)
         blurred_curr = self.pre_process_image(cropped_curr)
     
         self.images_deque.append(blurred_curr)

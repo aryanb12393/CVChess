@@ -2,6 +2,7 @@ import chess
 import chess.pgn
 from stockfish import Stockfish
 import image_processing_module
+import cropper
 
 class Piece():
 
@@ -298,14 +299,14 @@ class Game():
         self.switch_turn()
 
 
-    def make_move(self, has_castled, turn):
+    def make_move(self, has_castled, turn, img_values):
         
         board_array = self.board.to_piece_name_list()
         
         if (self.move_num == 1):
-            move_tuple = self.image_processing.detect_first_move(board_array)
+            move_tuple = self.image_processing.detect_first_move(board_array, img_values)
         else:
-            move_tuple = self.image_processing.detect_move(has_castled, turn, board_array)
+            move_tuple = self.image_processing.detect_move(has_castled, turn, board_array, img_values)
 
         # Verifies which is the right move, which is needed for Python chess module
         uci_string = self.detect_uci(move_tuple)
@@ -409,9 +410,9 @@ class Play():
         if (underpromotions.lower() == "y"):
             self.game.underpromotions = True
     
-    def play_game(self):
+    def play_game(self, final_points):
         
-        self.game.make_move(has_castled = False, turn = "white")
+        self.game.make_move(has_castled = False, turn = "white", img_values=final_points)
         node = self.game.chess_module_pgn.add_variation(chess.Move.from_uci(self.game.current_uci))
         
         print(self.game.board)
@@ -420,23 +421,26 @@ class Play():
 
             if (self.game.get_turn() == "white"):
                 if (not self.game.white_castled):
-                    self.game.make_move(has_castled=False, turn="white")
+                    self.game.make_move(has_castled=False, turn="white", img_values=final_points)
                 
                 else:
-                    self.game.make_move(has_castled=True, turn="white")
+                    self.game.make_move(has_castled=True, turn="white", img_values=final_points)
                 
             else:
                 if (not self.game.black_castled):
-                    self.game.make_move(has_castled=False, turn="black")
+                    self.game.make_move(has_castled=False, turn="black", img_values=final_points)
                    
                 else:
-                    self.game.make_move(has_castled=True, turn="black")
+                    self.game.make_move(has_castled=True, turn="black", img_values=final_points)
                 
 
             print(self.game.board)
             node = node.add_variation(chess.Move.from_uci(self.game.current_uci))
         
         print(self.game.chess_module_pgn)
-        
+
+the_cropper = cropper.Cropper()
+final_points = the_cropper.run_cropper()
+print(final_points)
 play = Play()
-play.play_game()
+play.play_game(final_points)
