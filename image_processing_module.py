@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from collections import deque
 import os
+from pathlib import Path
 
 # This is the ImageProcessing Class. 
 # It will handle the processing between two consecutive pictures, highlighting the difference (the move)
@@ -196,11 +197,13 @@ class ImageProcessing:
     
     def read_file_names(self):
         # Directory needs to be replaced with the path of where the pictures are
-        directory = ""
+        directory = "pics"
         # This assumes the images can be sorted by their name, which indicates when they were created.
         files = sorted(os.listdir(directory))
+        directory = Path("pics")
+
         for file in files:
             # ".DS_Store" file is created, and I don't want to read that in my image processing.
             if not file.startswith('.'):
-                self.file_names.append(directory + file)
+                self.file_names.append(directory/file)
 
