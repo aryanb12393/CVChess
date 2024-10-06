@@ -6,7 +6,6 @@ import cropper
 
 class Piece():
 
-    # The piece class captures the color of the piece and the type itself
     def __init__(self, piece_color=None, piece_type=None):
         self.piece_color = piece_color
         self.piece_type = piece_type
@@ -32,7 +31,6 @@ class Tile():
     # If a Tile is printed, it only prints the Piece on it
     def __str__(self):
         return str(self.piece)
-
 
 # While the Board object used in the Game class will change, none of the methods here directly change the Board state.
 # This is to promote a differentiation of purpose between the Board class and the Game class.
@@ -312,9 +310,13 @@ class Game():
         # Verifies which is the right move, which is needed for Python chess module
         uci_string = self.detect_uci(move_tuple)
         self.current_uci = uci_string
+        
         # En passant, promotion checks here
-        self.chess_module_board.push_uci(uci_string)
-                
+        try:
+            self.chess_module_board.push_uci(uci_string)
+        except (chess.IllegalMoveError, ValueError) as e:
+            print("The program couldn't detect your move. Please try running it again.")
+            raise e
         # Updates my custom chess board
         self.make_move_ccm(move_tuple, uci_string)
 
