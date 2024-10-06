@@ -167,7 +167,7 @@ class Board():
             if (not self.tile_is_occupied(position_2)):
                 # This assumes the player is playing chess correctly to focus on the detection
                 return True
-           
+            
         return False
     
     def get_piece_color(self, position):
@@ -403,35 +403,39 @@ class Play():
 
     def __init__(self, game = None):
         self.game = Game()
+        self.cropper = cropper.Cropper()
+        self.final_points = self.cropper.run_cropper()
         self.check_underpromotions()
-        
+    
     def check_underpromotions(self):
         underpromotions = input("Was any piece underpromoted in the game? Y/N: ")
         if (underpromotions.lower() == "y"):
             self.game.underpromotions = True
+        else:
+            self.game.underpromotions = False
     
-    def play_game(self, final_points):
+    def play_game(self):
         
-        self.game.make_move(has_castled = False, turn = "white", img_values=final_points)
+        self.game.make_move(has_castled = False, turn = "white", img_values=self.final_points)
         node = self.game.chess_module_pgn.add_variation(chess.Move.from_uci(self.game.current_uci))
         
         print(self.game.board)
         
-        for i in range(1, len(self.game.image_processing.file_names)-1):
+        for _ in range(1, len(self.game.image_processing.file_names)-1):
 
             if (self.game.get_turn() == "white"):
                 if (not self.game.white_castled):
-                    self.game.make_move(has_castled=False, turn="white", img_values=final_points)
+                    self.game.make_move(has_castled=False, turn="white", img_values=self.final_points)
                 
                 else:
-                    self.game.make_move(has_castled=True, turn="white", img_values=final_points)
+                    self.game.make_move(has_castled=True, turn="white", img_values=self.final_points)
                 
             else:
                 if (not self.game.black_castled):
-                    self.game.make_move(has_castled=False, turn="black", img_values=final_points)
+                    self.game.make_move(has_castled=False, turn="black", img_values=self.final_points)
                    
                 else:
-                    self.game.make_move(has_castled=True, turn="black", img_values=final_points)
+                    self.game.make_move(has_castled=True, turn="black", img_values=self.final_points)
                 
 
             print(self.game.board)
@@ -439,8 +443,5 @@ class Play():
         
         print(self.game.chess_module_pgn)
 
-the_cropper = cropper.Cropper()
-final_points = the_cropper.run_cropper()
-print(final_points)
 play = Play()
-play.play_game(final_points)
+play.play_game()

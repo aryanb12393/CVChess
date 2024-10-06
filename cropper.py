@@ -2,7 +2,7 @@ import cv2
 
 class Cropper:
     
-    # hard coded for now, can consider changing.
+    # hard coded for now, consider changing.
     def __init__(self, image_path="pics/IMG_0744.jpg"):
         self.image_path = image_path
         self.points = []
