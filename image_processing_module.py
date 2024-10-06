@@ -186,7 +186,7 @@ class ImageProcessing:
         return first_max_position, second_max_position
     
     def read_file_names(self):
-        # Directory needs to be replaced with the path of where the pictures are
+        # Put the images of the chessboard in "pics"
         directory = "pics"
         # This assumes the images can be sorted by their name, which indicates when they were created.
         files = sorted(os.listdir(directory))

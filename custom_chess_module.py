@@ -209,6 +209,7 @@ class Game():
         image_processing.read_file_names()
         self.underpromotions = False
         self.current_uci = ""
+        # Deafult option is a queen
         self.pawn_promoted_to = "q"
 
     # After a turn, players switch.
@@ -369,7 +370,6 @@ class Game():
         first_tile_tuple = move_tuple[0]
         second_tile_tuple = move_tuple[1]
 
-
         if (self.board.__getitem__(first_tile_tuple).is_occupied and self.board.__getitem__(second_tile_tuple).is_occupied):
             return self.detect_move_order_capture(first_tile_tuple, second_tile_tuple, turn)
 
@@ -437,7 +437,6 @@ class Play():
                 else:
                     self.game.make_move(has_castled=True, turn="black", img_values=self.final_points)
                 
-
             print(self.game.board)
             node = node.add_variation(chess.Move.from_uci(self.game.current_uci))
         

@@ -21,6 +21,7 @@ class Cropper:
             cv2.imshow("Image", self.image_copy)
 
     def run_cropper(self):
+        
         while True:
             self.image_copy = self.image.copy()
             self.points = []
