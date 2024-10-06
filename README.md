@@ -36,7 +36,7 @@ To use CVChess, you will need to install the following libraries:
 ## Future Plans
 I have two primary goals for future development:
 1. **Chess Clock Module**: Implement a chess clock using Tkinter. This will not only be useful for rapid chess but also enable frame extraction from a video based on timestamps, eliminating the need to take photos after every move.
-2. **GUI for Image Cropping**: Develop a GUI (also using Tkinter) to make the image cropping process more user-friendly. This will give users greater control over the analysis area and streamline the setup process.
+2. **GUI for Image Cropping**: Develop a GUI (also using Tkinter) to make the image cropping process more user-friendly. This will give users greater control over the analysis area and streamline the setup process. (Oct 2024: Completed)
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for more details.
